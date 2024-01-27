@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
 import loggerMiddleware from './middleware/logger.js';
 
@@ -9,6 +10,8 @@ import healthCheckRoutes from './routes/healthCheckRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import recordRoutes from './routes/recordRoutes.js'; 
+
+dotenv.config();
 
 const app = express();
 
@@ -40,15 +43,14 @@ app.use((err, req, res, next) => {
     const host = process.env.MONGODB_HOST;
     const dbName = process.env.MONGODB_DATABASE;
 
-    const connectionString = `mongodb+srv://${username}:${password}@${host}/${dbName}?retryWrites=true&w=majority`;
+    //const connectionString = `mongodb://${username}:${password}@${host}/${dbName}?retryWrites=true&w=majority`;
+    const connectionString = `mongodb://${host}/${dbName}?retryWrites=true&w=majority`;
 
     try {
-        await mongoose.connect(connectionString, {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
+        await mongoose.connect(connectionString);
         console.log('Connected to MongoDB.');
     } catch (error) {
+        console.log(error);
         console.error('Error connecting to MongoDB.');
     }
 })();
