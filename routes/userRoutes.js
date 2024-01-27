@@ -3,7 +3,7 @@ import { getUsers, deleteUser, createUser } from '../controllers/userController.
 
 const router = express.Router();
 
-router.get('/:userId', getUsers);
+router.get('/:userId?', getUsers);
 
 router.delete('/:userId', deleteUser);
 

@@ -3,7 +3,7 @@ import { getRecords, createRecord, deleteRecord } from '../controllers/recordCon
 
 const router = express.Router();
 
-router.get('/', getRecords); //req.query.recordId && req.query.categoryId
+router.get('/:recordId?', getRecords);
 
 router.delete('/:recordId', deleteRecord);
 
