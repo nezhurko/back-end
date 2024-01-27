@@ -1,4 +1,5 @@
 import Records from "../models/Record.js";
+import { authenticateUser } from "../middleware/authMiddleware.js";
 
 export const getRecords = async (req, res) => {
   try {

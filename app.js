@@ -10,6 +10,7 @@ import healthCheckRoutes from './routes/healthCheckRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import recordRoutes from './routes/recordRoutes.js'; 
+import userAuthRoutes from './routes/authRoutes.js';
 
 dotenv.config();
 
@@ -24,6 +25,9 @@ app.use(express.json());
 app.use(loggerMiddleware);
 
 app.use(healthCheckRoutes);
+
+app.use('/user/auth/',userAuthRoutes);
+
 app.use('/user/',userRoutes);
 app.use('/category/',categoryRoutes);
 app.use('/record/',recordRoutes);

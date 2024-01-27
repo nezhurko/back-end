@@ -34,6 +34,7 @@ export const getUsers = async (req, res) => {
     }
   };
   
+  /*
   export const createUser = async (req, res) => {
     try {
       const { userName } = req.body;
@@ -53,3 +54,4 @@ export const getUsers = async (req, res) => {
       return res.status(500).json({ error: 'Internal Server Error' });
     }
   };
+  */
