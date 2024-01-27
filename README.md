@@ -1,4 +1,4 @@
-# All in one
+### Variant: 14 mod 3 = 2
 
 How to test this?
 

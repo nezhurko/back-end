@@ -1,40 +1,52 @@
-export const getCategories = async (req,res) => {
+import Categories from "../models/Category.js";
+import Users from '../models/User.js';
+
+export const getCategories = async (req, res) => {
     try {
-        return res.status(200).json(global.categories);
+      const categories = await Categories.find();
+      return res.status(200).json(categories);
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: 'Internal Server Error' });
+      console.error(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
-};
-
-export const deleteAllCategories = async (req,res) => {
+  };
+  
+  export const deleteAllCategories = async (req, res) => {
     try {
-        global.categories = [];
-        return res.status(200).json(global.categories); 
+      await Categories.deleteMany({});
+      const categories = await Categories.find();
+      return res.status(200).json(categories);
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: 'Internal Server Error' });
+      console.error(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
-};
-
-export const createCategory = async (req,res) => {
+  };
+  
+  export const createCategory = async (req, res) => {
     try {
-        const { categoryName } = req.body;
+      const { categoryName, isCategoryPublic, categoryOwner } = req.body;
+  
+      if (!categoryName || (!isCategoryPublic && categoryOwner === undefined)) {
+        return res.status(400).json({ error: 'Required fields are missing.' });
+      }
 
-        if (!categoryName) {
-            return res.status(400).json({ error: 'Required fields are missing.' });
-        };
+      if (!isCategoryPublic && categoryOwner) {
+        const user = await Users.findById(categoryOwner);
+        if (!user) {
+          return res.status(400).json({ error: 'Invalid category owner.' });
+        }
+      }
+      
+      const category = await new Categories({
+        _id: (await Categories.findOne({}, {}, { sort: { '_id': -1 } }).exec())._id + 1,
+        name: categoryName,
+        isPublic: isCategoryPublic,
+        owner: isCategoryPublic ? undefined : categoryOwner
+      }).save();
 
-        const id = global.categories.length === 0 ? 1 : Math.max(...categories.map(category => category.id)) + 1;
-
-        global.categories.push({
-            id: id,
-            name: String(categoryName)
-        });
-
-        return res.status(201).json(global.categories.find(category => category.id === id));
+      return res.status(201).json(category);
     } catch (error) {
-        console.error(error);
-        return res.status(500).json({ error: 'Internal Server Error' });
+      console.error(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
-};
+  };
