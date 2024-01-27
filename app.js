@@ -3,6 +3,10 @@ import cors from 'cors';
 
 import healthCheckRoutes from './routes/healthCheckRoutes.js';
 
+import userRoutes from './routes/userRoutes.js';
+import categoryRoutes from './routes/categoryRoutes.js';
+import recordRoutes from './routes/recordRoutes.js'; 
+
 const app = express();
 
 global.users = [];
